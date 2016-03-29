@@ -1,0 +1,171 @@
+<html style="margin:0px;overflow:hidden;"><head>
+	<script type="text/javascript">
+		var DRAW_IFRAME_URL = 'https://www.draw.io/?embed=1';
+		var graph = null;
+		var xml = null;
+
+		function mxClientOnLoad(stylesheet)
+		{
+			xml = document.getElementById('mxfile').innerHTML;
+			xml = decodeURIComponent(xml);
+								
+			// Removes all illegal control characters before parsing
+			var checked = [];
+			    				
+			for (var i = 0; i < xml.length; i++)
+			{
+				var code = xml.charCodeAt(i);
+			    					
+				// Removes all control chars except TAB, LF and CR
+				if (code >= 32 || code == 9 || code == 10 || code == 13)
+			    {
+			    	checked.push(xml.charAt(i));
+			    }
+			}
+			    				
+			xml = checked.join('');
+			
+			var div = document.createElement('div');
+			div.style.width = '100%';
+			div.style.height = '100%';
+			div.style.position = 'relative';
+			document.body.appendChild(div);
+			graph = new mxGraph(div);
+			
+			graph.resetViewOnRootChange = false;
+			graph.foldingEnabled = false;
+			// NOTE: Tooltips require CSS
+			graph.setTooltips(false);
+			graph.setEnabled(false);
+			
+			// Loads the stylesheet
+			if (stylesheet != null)
+			{
+				var xmlDoc = mxUtils.parseXml(stylesheet);
+				var dec = new mxCodec(xmlDoc);
+				dec.decode(xmlDoc.documentElement, graph.getStylesheet());
+			}
+			
+			var xmlDoc = mxUtils.parseXml(xml);
+			var codec = new mxCodec(xmlDoc);
+			codec.decode(codec.document.documentElement, graph.getModel());
+			graph.maxFitScale = 1;
+			graph.fit();
+			graph.center(true, false);
+			
+			window.addEventListener('resize', function()
+			{
+				graph.fit();
+				graph.center(true, false);
+			});
+		}
+		
+		function edit(url)
+		{
+			var border = 0;
+			var iframe = document.createElement('iframe');
+			iframe.style.zIndex = '9999';
+			iframe.style.position = 'absolute';
+			iframe.style.top = border + 'px';
+			iframe.style.left = border + 'px';
+
+			if (border == 0)
+			{
+				iframe.setAttribute('frameborder', '0');
+			}
+			 
+			var resize = function()
+			{
+				iframe.setAttribute('width', document.body.clientWidth - 2 * border);
+				iframe.setAttribute('height', document.body.clientHeight - 2 * border);
+			};
+			 
+			window.addEventListener('resize', resize);
+			resize();
+			 
+			var receive = function(evt)
+			{
+				if (evt.data == 'ready')
+				{
+					iframe.contentWindow.postMessage(xml, '*');
+					resize();
+				}
+				else
+				{
+					if (evt.data.length > 0)
+					{
+						// Update the graph
+						var xmlDoc = mxUtils.parseXml(evt.data);
+						var codec = new mxCodec(xmlDoc);
+						codec.decode(codec.document.documentElement, graph.getModel());
+						graph.fit();
+						graph.center(true, false);
+						
+						var data = encodeURIComponent(evt.data);
+						var idx = doc.indexOf('<div ' + 'id="mxfile"');
+						var newdoc = doc.substring(0, idx) + '\n<div ' + 'id="mxfile" style="display:none;">' +
+							data + '</d' + 'iv>' +
+							'\n<script type="text/javascript">\nvar doc = document.documentElement.outerHTML;\n</' + 'script>' +
+							'\n<script type="text/javascript" src="https://www.draw.io/embed.js"></' + 'script></body></html>';
+						
+						save(newdoc, location.pathname.substring(location.pathname.lastIndexOf("/") + 1));
+					}
+					
+					window.removeEventListener('resize', resize);
+					window.removeEventListener('message', receive);
+					document.body.removeChild(iframe);
+				}
+			};
+			
+			window.addEventListener('message', receive);
+			iframe.setAttribute('src', DRAW_IFRAME_URL);
+			document.body.appendChild(iframe);
+		}
+		
+		function save(data, filename)
+		{
+			try
+			{
+				if (mxClient.IS_QUIRKS || document.documentMode >= 8)
+				{
+					var win = window.open('about:blank', '_blank');
+					win.document.write(data);
+					win.document.close();
+					win.document.execCommand('SaveAs', true, filename);
+					win.close();
+				}
+				else if (mxClient.IS_SF)
+				{
+					// Opens new tab (user saves file). No workaround to force dialog in Safari.
+					window.open('data:application/octet-stream,' + encodeURIComponent(data), filename);
+				}
+				else
+				{
+					var a = document.createElement('a');
+	
+					// NOTE: URL.revokeObjectURL(a.href) after click breaks download in FF
+					a.href = URL.createObjectURL(new Blob([data], {type: 'application/octet-stream'}));
+					a.download = filename;
+					document.body.appendChild(a);
+					a.click();
+					a.parentNode.removeChild(a);
+					URL.revokeObjectURL(a.href);
+				}
+			}
+			catch (e)
+			{
+				console.log('error', e);
+				console.log('html', data);
+			}
+		};
+	</script>
+</head>
+<body style="margin:10px;overflow:hidden;">
+	<button onclick="edit();" style="position:absolute;right:10px;z-index:1;"><img width="32" height="32" title="" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC5UlEQVRYhb2XTUhUURTHf2NDWLQIkbBHSIsIsRKZA63KGiMCLaRFmwiloEW4inATIUREGykogiDow6JdixDL0nGyWgVHJMJSIkREwqJVSIhoi3eGbpc343x2NxfuPe/8/veccz9ejAo1EakCzgBHgHnghqrO+HaxCsLvA53O8E/gsKqOu7ZVlRAAHAROeWM1wLCIJComQERqRKRRVUeBbmBlLRFlEyAiATAGjIlIk6reyUdEOSNwHtgN1AKpPEVsX1cqVUQ2B0FQBbwCdgB7gI3AiSAIXqrqYBAEC0Ab/xb9BigxAiJSA6SAZ8B6oAt4YtP5RKKuaAEGHwYSQCvQoqrLBYp4UZQAEaklXHnCHJ5W1SER2QLE8xRxD+gv+CBy4E0OvF9E6oA0MAMcB5aBh8BJ+/QHcEhVP4hIK/BaVVcKEmArHM4BbzDTIaDDbCJFZHzmnQKD51p5g2M+CSxF1MQSXiHmtQ0NMgrsMgddqvrIDp9RD34duKCqiEgnMAU8BTYB51R1yvW9ZgoMngIaHfhjg6dywC8DvcAI0KGqi1H+c6bAIOkS4ADNQH02RlYBDryhBPgCYdF9zsaJTIGIbDPIzgLhV4BLHvxjNnikAIOnCc91H542UWvBvxl8MhccvBSISD3hlZoPvK9UODgRsGfUJ6LDHgXvyQJP5sq539wI7HUg3UXA54EDhcB9Ae3WLwIPioAnVXW6ELgv4Kj1I6r6m/BRcRvIOO0DegAfPke48oLhEF6dmT3fbGODAKr6BbgpIlvNrsfmrwIXHXjSbItqcevbnLHnns0twhD78FmDfy0WDn9TcMz6CVWdcw1UdR6oBq458BnCsJcEB4iJSDXwnfC2Ggf2q+qiHUhthMXZavMZeDLqN6uYFgdaHOeJ1dXVt3YmNEfYTxP+Xs2WA54R0O4OxGKxhGczQVgXA8B7VfVftiUL2OeN/SJ8ZAwAQ35NlLvFgbvAWeAd4RZ8Y+fAf2l/AAQGfuWJPdOiAAAAAElFTkSuQmCC"></button>
+	
+
+<div id="mxfile" style="display:none;">%3CmxGraphModel%20dx%3D%22926%22%20dy%3D%221200%22%20grid%3D%221%22%20gridSize%3D%2210%22%20guides%3D%221%22%20tooltips%3D%221%22%20connect%3D%221%22%20fold%3D%221%22%20page%3D%221%22%20pageScale%3D%221%22%20pageWidth%3D%22826%22%20pageHeight%3D%221169%22%20style%3D%22default-style2%22%20math%3D%220%22%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%2212%22%20value%3D%22Thread%201%22%20style%3D%22swimlane%3BwhiteSpace%3Dwrap%22%20parent%3D%221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2260%22%20y%3D%2220%22%20width%3D%22210%22%20height%3D%22570%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2213%22%20value%3D%22%22%20style%3D%22ellipse%3Bshape%3DstartState%3BfillColor%3D%23000000%3BstrokeColor%3D%23ff0000%3B%22%20parent%3D%2212%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22100%22%20y%3D%2240%22%20width%3D%2230%22%20height%3D%2230%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2214%22%20value%3D%22%22%20style%3D%22edgeStyle%3DelbowEdgeStyle%3Belbow%3Dhorizontal%3BverticalAlign%3Dbottom%3BendArrow%3Dopen%3BendSize%3D8%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2212%22%20source%3D%2213%22%20target%3D%2215%22%20edge%3D%221%22%3E%3CmxGeometry%20x%3D%22100%22%20y%3D%2240%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%22115%22%20y%3D%22110%22%20as%3D%22targetPoint%22%2F%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2215%22%20value%3D%22idle%22%20style%3D%22%22%20parent%3D%2212%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2260%22%20y%3D%22110%22%20width%3D%22110%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2216%22%20value%3D%22user%20action%22%20style%3D%22%22%20parent%3D%2212%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2260%22%20y%3D%22220%22%20width%3D%22110%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2217%22%20value%3D%22%22%20style%3D%22endArrow%3Dopen%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2212%22%20source%3D%2215%22%20target%3D%2216%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2218%22%20value%3D%22post%20command%22%20style%3D%22%22%20parent%3D%2212%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2260%22%20y%3D%22325%22%20width%3D%22110%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2219%22%20value%3D%22%22%20style%3D%22endArrow%3Dopen%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2212%22%20source%3D%2216%22%20target%3D%2218%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2220%22%20value%3D%22%22%20style%3D%22edgeStyle%3DelbowEdgeStyle%3Belbow%3Dhorizontal%3BstrokeColor%3D%23FF0000%3BendArrow%3Dopen%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2212%22%20source%3D%2218%22%20target%3D%2215%22%20edge%3D%221%22%3E%3CmxGeometry%20width%3D%22100%22%20height%3D%22100%22%20relative%3D%221%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%22160%22%20y%3D%22290%22%20as%3D%22sourcePoint%22%2F%3E%3CmxPoint%20x%3D%22260%22%20y%3D%22190%22%20as%3D%22targetPoint%22%2F%3E%3CArray%20as%3D%22points%22%3E%3CmxPoint%20x%3D%2230%22%20y%3D%22250%22%2F%3E%3C%2FArray%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2221%22%20value%3D%22Thread%202%22%20style%3D%22swimlane%3BwhiteSpace%3Dwrap%22%20parent%3D%221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22270%22%20y%3D%2220%22%20width%3D%22280%22%20height%3D%22570%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2222%22%20value%3D%22%22%20style%3D%22ellipse%3Bshape%3DstartState%3BfillColor%3D%23000000%3BstrokeColor%3D%23ff0000%3B%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2260%22%20y%3D%2240%22%20width%3D%2230%22%20height%3D%2230%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2223%22%20value%3D%22%22%20style%3D%22edgeStyle%3DelbowEdgeStyle%3Belbow%3Dhorizontal%3BverticalAlign%3Dbottom%3BendArrow%3Dopen%3BendSize%3D8%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2221%22%20source%3D%2222%22%20target%3D%2224%22%20edge%3D%221%22%3E%3CmxGeometry%20x%3D%2240%22%20y%3D%2220%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%2255%22%20y%3D%2290%22%20as%3D%22targetPoint%22%2F%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2224%22%20value%3D%22idle%22%20style%3D%22%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2220%22%20y%3D%22110%22%20width%3D%22110%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2225%22%20value%3D%22check%20for%20%26%23xa%3Bnew%20commands%22%20style%3D%22%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2220%22%20y%3D%22220%22%20width%3D%22110%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2226%22%20value%3D%22%22%20style%3D%22endArrow%3Dopen%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2221%22%20source%3D%2224%22%20target%3D%2225%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2227%22%20value%3D%22command%20queue%22%20style%3D%22%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2220%22%20y%3D%22325%22%20width%3D%22110%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2228%22%20value%3D%22%22%20style%3D%22endArrow%3Dopen%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2221%22%20source%3D%2225%22%20target%3D%2227%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2229%22%20value%3D%22queue%20empty%22%20style%3D%22rhombus%3BfillColor%3D%23ffffc0%3BstrokeColor%3D%23ff0000%3B%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22150%22%20y%3D%22225%22%20width%3D%2280%22%20height%3D%2240%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2230%22%20value%3D%22yes%22%20style%3D%22edgeStyle%3DelbowEdgeStyle%3Belbow%3Dhorizontal%3Balign%3Dleft%3BverticalAlign%3Dbottom%3BendArrow%3Dopen%3BendSize%3D8%3BstrokeColor%3D%23FF0000%3BexitX%3D0.5%3BexitY%3D0%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2221%22%20source%3D%2229%22%20edge%3D%221%22%3E%3CmxGeometry%20x%3D%22-1%22%20relative%3D%221%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%22160%22%20y%3D%22150%22%20as%3D%22targetPoint%22%2F%3E%3CArray%20as%3D%22points%22%3E%3CmxPoint%20x%3D%22190%22%20y%3D%22180%22%2F%3E%3C%2FArray%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2231%22%20value%3D%22no%22%20style%3D%22edgeStyle%3DelbowEdgeStyle%3Belbow%3Dhorizontal%3Balign%3Dleft%3BverticalAlign%3Dtop%3BendArrow%3Dopen%3BendSize%3D8%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2221%22%20source%3D%2229%22%20target%3D%2235%22%20edge%3D%221%22%3E%3CmxGeometry%20x%3D%22-1%22%20relative%3D%221%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%22190%22%20y%3D%22305%22%20as%3D%22targetPoint%22%2F%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2232%22%20value%3D%22%22%20style%3D%22endArrow%3Dopen%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2221%22%20source%3D%2225%22%20target%3D%2229%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2233%22%20value%3D%22%22%20style%3D%22shape%3Dline%3BstrokeWidth%3D6%3BstrokeColor%3D%23ff0000%3Brotation%3D90%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22130%22%20y%3D%22127.5%22%20width%3D%2250%22%20height%3D%2215%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2234%22%20value%3D%22%22%20style%3D%22edgeStyle%3DelbowEdgeStyle%3Belbow%3Dhorizontal%3BverticalAlign%3Dbottom%3BendArrow%3Dopen%3BendSize%3D8%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2221%22%20source%3D%2233%22%20target%3D%2224%22%20edge%3D%221%22%3E%3CmxGeometry%20x%3D%22130%22%20y%3D%2290%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%22230%22%20y%3D%22140%22%20as%3D%22targetPoint%22%2F%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2235%22%20value%3D%22dispatch%26%23xa%3Bcommand%26%23xa%3Bworker%20thread%22%20style%3D%22%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22140%22%20y%3D%22325%22%20width%3D%22110%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2236%22%20value%3D%22critical%26%23xa%3Bsection%22%20style%3D%22shape%3Dnote%3BwhiteSpace%3Dwrap%3Bsize%3D17%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22105%22%20y%3D%22490%22%20width%3D%22100%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2237%22%20value%3D%22%22%20style%3D%22endArrow%3Dnone%3BstrokeColor%3D%23FF0000%3BendFill%3D0%3Brounded%3D0%3Bdashed%3D1%22%20parent%3D%2221%22%20source%3D%2227%22%20target%3D%2236%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2238%22%20value%3D%22%22%20style%3D%22whiteSpace%3Dwrap%3BstrokeColor%3D%23FF0000%3BfillColor%3D%23FF0000%22%20parent%3D%2221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22245%22%20y%3D%22395%22%20width%3D%225%22%20height%3D%2245%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2239%22%20value%3D%22%22%20style%3D%22edgeStyle%3DelbowEdgeStyle%3Belbow%3Dhorizontal%3BentryX%3D0%3BentryY%3D0.5%3BstrokeColor%3D%23FF0000%3BendArrow%3Dopen%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2221%22%20source%3D%2235%22%20target%3D%2238%22%20edge%3D%221%22%3E%3CmxGeometry%20width%3D%22100%22%20height%3D%22100%22%20relative%3D%221%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%2260%22%20y%3D%22480%22%20as%3D%22sourcePoint%22%2F%3E%3CmxPoint%20x%3D%22160%22%20y%3D%22380%22%20as%3D%22targetPoint%22%2F%3E%3CArray%20as%3D%22points%22%3E%3CmxPoint%20x%3D%22195%22%20y%3D%22400%22%2F%3E%3C%2FArray%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2240%22%20value%3D%22Thread%203%22%20style%3D%22swimlane%3BwhiteSpace%3Dwrap%22%20parent%3D%221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22550%22%20y%3D%2220%22%20width%3D%22230%22%20height%3D%22570%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2241%22%20value%3D%22process%26%23xa%3Bcommand%22%20style%3D%22%22%20parent%3D%2240%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2290%22%20y%3D%22405%22%20width%3D%22110%22%20height%3D%2250%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2242%22%20value%3D%22%22%20style%3D%22edgeStyle%3DelbowEdgeStyle%3Belbow%3Dhorizontal%3BstrokeColor%3D%23FF0000%3BendArrow%3Dopen%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2240%22%20edge%3D%221%22%3E%3CmxGeometry%20width%3D%22100%22%20height%3D%22100%22%20relative%3D%221%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%22-30%22%20y%3D%22410%22%20as%3D%22sourcePoint%22%2F%3E%3CmxPoint%20x%3D%22-120%22%20y%3D%22120%22%20as%3D%22targetPoint%22%2F%3E%3CArray%20as%3D%22points%22%3E%3CmxPoint%20x%3D%22-10%22%20y%3D%22280%22%2F%3E%3C%2FArray%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2243%22%20value%3D%22%22%20style%3D%22edgeStyle%3Dnone%3BstrokeColor%3D%23FF0000%3BendArrow%3Dopen%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2240%22%20target%3D%2241%22%20edge%3D%221%22%3E%3CmxGeometry%20width%3D%22100%22%20height%3D%22100%22%20relative%3D%221%22%20as%3D%22geometry%22%3E%3CmxPoint%20x%3D%22-30%22%20y%3D%22429.5%22%20as%3D%22sourcePoint%22%2F%3E%3CmxPoint%20x%3D%2290%22%20y%3D%22429.5%22%20as%3D%22targetPoint%22%2F%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2244%22%20value%3D%22%22%20style%3D%22ellipse%3Bshape%3DendState%3BfillColor%3D%23000000%3BstrokeColor%3D%23ff0000%22%20parent%3D%2240%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22130%22%20y%3D%22500%22%20width%3D%2230%22%20height%3D%2230%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2245%22%20value%3D%22%22%20style%3D%22endArrow%3Dopen%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%2240%22%20source%3D%2241%22%20target%3D%2244%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2246%22%20value%3D%22%22%20style%3D%22endArrow%3Dopen%3BstrokeColor%3D%23FF0000%3BendFill%3D1%3Brounded%3D0%22%20parent%3D%221%22%20source%3D%2218%22%20target%3D%2227%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E</div>
+<script type="text/javascript">
+var doc = document.documentElement.outerHTML;
+</script>
+<script type="text/javascript" src="https://www.draw.io/embed.js"></script></body></html>
