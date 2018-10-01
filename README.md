@@ -30,9 +30,11 @@ The basic flow of the protocol is as follows:
 
 In some cases, additional steps may be required to check for a draft state or to export the diagram as an image. <a href="https://support.draw.io/pages/viewpage.action?pageId=8945851" target="_blank">Here</a> is a simple embedding walk-through.
 
+A hash property with a JSON string and a C prefix can be used in the iframe URL to configure the editor, eg. #C{"defaultVertexStyle": {"fontFamily": "Garamond"}}. This allows to load custom CSS, configure colors, fonts and default styles. The specification is <a href="https://desk.draw.io/support/solutions/articles/16000058316" target="_blank">here</a>.
+
 The following examples are available:
 
 * <a href="http://jgraph.github.io/drawio-html5/localstorage.html#default" target="_blank">Using Local Storage</a> Saving and loading a draw.io diagram to/from HTML5 local storage (use the part of the hash-tag to change the local storage key)
-* <a href="http://jgraph.github.io/drawio-html5/localstorage-svg.html#default" target="_blank">Using Local Storage (SVG)</a> Saving and loading a draw.io diagram to/from HTML5 local storage as SVG (use the part of the hash-tag to change the local storage key). This example uses an SVG element instead of an image to support hyperlinks. Keep in mind that draw.io uses foreignObjects for text labels in static SVG output. ForeignObjects are not supported in IE11 and earlier.
+* <a href="http://jgraph.github.io/drawio-html5/localstorage-svg.html#default" target="_blank">Using Local Storage (SVG)</a> Saving and loading a draw.io diagram to/from HTML5 local storage as SVG (use the part of the hash-tag to change the local storage key). This example uses an SVG element instead of an image to support hyperlinks. Keep in mind that draw.io uses foreignObjects for text labels in static SVG output. ForeignObjects are not supported in IE11 and earlier. (For draft states, a special dialog is now available.)
 * <a href="http://jgraph.github.io/drawio-html5/localfile.html" target="_blank">Using Local File</a> Saving and loading to/from a self-modifying local file
 * <a href="http://jgraph.github.io/drawio-html5/collapsed.html" target="_blank">Embedded diagram in hidden container</a> Test case for hidden containers
