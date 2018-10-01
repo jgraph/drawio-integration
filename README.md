@@ -20,7 +20,7 @@ supported in IE11 and earlier. To fully support IE11 in SVG output, certain appl
 to handle these files.
 - PNG images should be used if a bitmap image is required, to support IE11 and earlier or for special fonts.
 
-The storage can be any persistence mechanism. The image or XML file can be stored and used in the output of the host application, such as an image tag, SVG DOM or HTML viewer. Filename, metadata and revisions must be handled by the host application. All communication between the host application and draw.io happens on the client-side. The protocol specification is <a href="https://desk.draw.io/support/solutions/articles/16000042544" target="_blank">here</a>.
+The storage can be any persistence mechanism. The image or XML file can be stored and used in the output of the host application, such as an image tag, SVG DOM or HTML viewer. Authentication, file descriptors, revisions etc must be handled by the host application. All communication between the host application and draw.io happens on the client-side. The protocol specification is <a href="https://desk.draw.io/support/solutions/articles/16000042544" target="_blank">here</a>.
 
 The basic flow of the protocol is as follows:
 
