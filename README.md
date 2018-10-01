@@ -30,7 +30,7 @@ The basic flow of the protocol is as follows:
 
 In some cases, additional steps may be required to check for a draft state or to export the diagram as an image. <a href="https://support.draw.io/pages/viewpage.action?pageId=8945851" target="_blank">Here</a> is a simple embedding walk-through.
 
-A hash property with a JSON string and a C prefix can be used in the draw.io URL to configure the editor, eg. #C{"defaultVertexStyle": {"fontFamily": "Garamond"}}. This allows to load custom CSS, configure colors, fonts and default styles. The specification is <a href="https://desk.draw.io/support/solutions/articles/16000058316" target="_blank">here</a>.
+A hash property with a JSON string and a C prefix can be used in the draw.io URL to configure the editor, eg. #C{"defaultVertexStyle": {"fontFamily": "Garamond"}}. This allows to load custom CSS, configure colors, fonts and default styles. The specification is <a href="https://desk.draw.io/support/solutions/articles/16000058316" target="_blank">here</a>. Note that the maximum URL length is 2,083 characters in Internet Explorer.
 
 The following examples are available:
 
