@@ -29,7 +29,7 @@
 		}
 	</style>
 	<script type="text/javascript">
-		var editor = 'https://www.draw.io/?embed=1&ui=min&spin=1&proto=json';
+		var editor = 'https://www.draw.io/?embed=1&ui=min&spin=1&proto=json&configure=1';
 		var initial = null;
 		var name = null;
 
@@ -62,7 +62,16 @@
 				{
 					var msg = JSON.parse(evt.data);
 					
-					if (msg.event == 'init')
+					// If configure=1 URL parameter is used the application
+					// waits for this message. For configuration options see
+					// https://desk.draw.io/support/solutions/articles/16000058316
+					if (msg.event == 'load')
+					{
+						// Configuration example
+						iframe.contentWindow.postMessage(JSON.stringify({action: 'configure',
+							config: {defaultFonts: ["Humor Sans", "Helvetica", "Times New Roman"]}}), '*');
+					}
+					else if (msg.event == 'init')
 					{
 						if (draft != null)
 						{
