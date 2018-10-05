@@ -24,9 +24,9 @@ The storage can be any persistence mechanism. The image or XML file can be store
 
 The basic flow of the protocol is as follows:
 
-1. Wait for init message
-2. Send load message
-3. Wait for save/edit message
+1. Wait for init event
+2. Send load action
+3. Wait for save/exit event
 
 In some cases, additional steps may be required to check for a draft state or to export the diagram as an image. <a href="https://support.draw.io/pages/viewpage.action?pageId=8945851" target="_blank">Here</a> is a simple embedding walk-through. Special messages are available in the protocol to show draft states or a template dialog.
 
