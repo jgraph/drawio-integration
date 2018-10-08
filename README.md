@@ -38,3 +38,8 @@ The following examples are available:
 * <a href="http://jgraph.github.io/drawio-html5/localstorage-svg.html#default" target="_blank">Using Local Storage (SVG)</a> Saving and loading a draw.io diagram to/from HTML5 local storage as SVG (use the part of the hash-tag to change the local storage key). This example uses an SVG element instead of an image to support hyperlinks. Keep in mind that draw.io uses foreignObjects for text labels in static SVG output. ForeignObjects are not supported in IE11 and earlier. (For draft states, a special dialog is now available.)
 * <a href="http://jgraph.github.io/drawio-html5/localfile.html" target="_blank">Using Local File</a> Saving and loading to/from a self-modifying local file
 * <a href="http://jgraph.github.io/drawio-html5/collapsed.html" target="_blank">Embedded diagram in hidden container</a> Test case for hidden containers
+
+Additional examples are available in the following repositories:
+
+* <a href="https://github.com/jgraph/drawio-webdav">Using embed mode with WebDav</a>
+* <a href="https://github.com/jgraph/drawio-github">Using embed mode with GitHub</a>
