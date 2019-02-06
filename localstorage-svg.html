@@ -65,7 +65,7 @@
 					// If configure=1 URL parameter is used the application
 					// waits for this message. For configuration options see
 					// https://desk.draw.io/support/solutions/articles/16000058316
-					if (msg.event == 'load')
+					if (msg.event == 'configure')
 					{
 						// Configuration example
 						iframe.contentWindow.postMessage(JSON.stringify({action: 'configure',
