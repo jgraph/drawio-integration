@@ -1,4 +1,4 @@
-# Draw.io WebDav Integration
+# draw.io WebDav Integration
 
 Please read <a href="https://github.com/jgraph/drawio-integration/" target="_blank">this</a> for a high-level introduction.
 
