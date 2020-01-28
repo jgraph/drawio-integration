@@ -1,4 +1,4 @@
-# Draw.io HTML5 Integration
+# Draw.io Integration
 
 Integration, or "embed mode" is used for cases where the storage of the diagram is taken care of by a host application,
 and draw.io is used for diagram editing. In this case, draw.io is used inside an iframe or window with special URL
@@ -16,7 +16,7 @@ Depending on the requirements, a PNG or SVG image or the XML for the diagram can
 - Images (PNG and SVG) should be used for fast loading with no initial delay. Embedding the diagram data for editing in PNG and SVG images can be used to avoid saving the image and diagram separately, but will result in bigger image files. When using a viewer or editor, images should be used to show a placeholder or preview.
 - SVG images should be used if hyperlinks and vector images are required. (The SVG output of draw.io uses foreign objects, which are not
 supported in IE11 and earlier. To fully support IE11 in SVG output, certain application features must be disabled, which is not recommended.)
-- XML should be used if no image version of the diagram is required or to store the XML separately from the image. A viewer or editor is required 
+- XML should be used if no image version of the diagram is required or to store the XML separately from the image. A viewer or editor is required
 to handle these files.
 - PNG images should be used if a bitmap image is required, to support IE11 and earlier or for special fonts.
 
@@ -34,12 +34,9 @@ Fonts, colors, default styles, libraries, CSS and more can be configured to matc
 
 The following examples are available:
 
+* <a href="http://jgraph.github.io/drawio-html5/javascript-api.html" target="_blank">JavaScript API</a> for editing embedded SVG and PNG images in a HTML page
 * <a href="http://jgraph.github.io/drawio-html5/localstorage.html#default" target="_blank">Using Local Storage</a> Saving and loading a draw.io diagram to/from HTML5 local storage (use the part of the hash-tag to change the local storage key)
 * <a href="http://jgraph.github.io/drawio-html5/localstorage-svg.html#default" target="_blank">Using Local Storage (SVG)</a> Saving and loading a draw.io diagram to/from HTML5 local storage as SVG (use the part of the hash-tag to change the local storage key). This example uses an SVG element instead of an image to support hyperlinks. Keep in mind that draw.io uses foreignObjects for text labels in static SVG output. ForeignObjects are not supported in IE11 and earlier. (For draft states, a special dialog is now available.)
 * <a href="http://jgraph.github.io/drawio-html5/localfile.html" target="_blank">Using Local File</a> Saving and loading to/from a self-modifying local file
-* <a href="http://jgraph.github.io/drawio-html5/collapsed.html" target="_blank">Embedded diagram in hidden container</a> Test case for hidden containers
-
-Additional examples are available in the following repositories:
-
-* <a href="https://github.com/jgraph/drawio-webdav">Using embed mode with WebDav</a>
-* <a href="https://github.com/jgraph/drawio-github">Using embed mode with GitHub</a>
+* <a href="https://github.com/jgraph/drawio-html5/webdav" target="_blank">Using embed mode with WebDav</a>
+* <a href="https://github.com/jgraph/drawio-github" target="_blank">Using embed mode with GitHub</a>

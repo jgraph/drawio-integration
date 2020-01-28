@@ -1,0 +1,150 @@
+<html>
+<head>
+	<script type="text/javascript">
+		// TODO: Add include-all-shapes in embed.js?s=* URL
+		var DRAW_IFRAME_URL = 'https://test.draw.io/?dev=1&embed=1&returnbounds=1';
+		// See also: https://gist.github.com/alderg/8826608
+		// FIXME: Missing header in PUT response with CORS?
+		var previewGraph = null;
+
+		function mxClientOnLoad(stylesheet)
+		{
+			var div = document.createElement('div');
+			div.style.width = '480px';
+			div.style.height = '360px';
+			div.style.border = '1px solid gray';
+			div.style.position = 'relative';
+			document.body.appendChild(div);
+			previewGraph = new Graph(div);
+			
+			previewGraph.resetViewOnRootChange = false;
+			previewGraph.foldingEnabled = false;
+			// NOTE: Tooltips require CSS
+			previewGraph.setTooltips(false);
+			previewGraph.setEnabled(false);
+			
+			// Loads the stylesheet
+			if (stylesheet != null)
+			{
+				var xmlDoc = mxUtils.parseXml(stylesheet);
+				var dec = new mxCodec(xmlDoc);
+				dec.decode(xmlDoc.documentElement, previewGraph.getStylesheet());
+			}
+		}
+		
+		function edit(url)
+		{
+			var req = new XMLHttpRequest();
+			req.withCredentials = true;
+			
+			req.onreadystatechange = function()
+			{
+				if (req.readyState == 4)
+				{
+					var border = 0;
+					var iframe = document.createElement('iframe');
+					iframe.style.zIndex = '9999';
+					iframe.style.position = 'absolute';
+					iframe.style.top = border + 'px';
+					iframe.style.left = border + 'px';
+
+					if (border == 0)
+					{
+						iframe.setAttribute('frameborder', '0');
+					}
+
+					var resize = function()
+					{
+						iframe.setAttribute('width', document.body.clientWidth - 2 * border);
+						iframe.setAttribute('height', document.body.clientHeight - 2 * border);
+					};
+					 
+					window.addEventListener('resize', resize);
+					resize();
+					
+					var receive = function(evt)
+					{
+						console.log('evt.data', evt.data);
+					
+						if (evt.data == 'ready')
+						{
+							iframe.contentWindow.postMessage(req.responseText, '*');
+						}
+						else
+						{
+							if (evt.data.length > 0 && evt.data.charAt(0) == '<')
+							{
+								var req2 = new XMLHttpRequest();
+								req2.withCredentials = true;
+								
+								req2.onreadystatechange = function()
+								{
+									if (req2.readyState == 4)
+									{
+										//console.log('req', req2.responseText);
+									}
+								};
+								
+								req2.open('PUT', url, true);
+								req2.send(evt.data);
+							}
+							
+							if (evt.data.length == 0)
+							{
+								window.removeEventListener('resize', resize);
+								window.removeEventListener('message', receive);
+								document.body.removeChild(iframe);
+							}
+						}
+					};
+
+					window.addEventListener('message', receive);
+					iframe.setAttribute('src', DRAW_IFRAME_URL);
+					document.body.appendChild(iframe);
+				}
+			};
+			
+			req.onerror = function()
+			{
+				alert('error');
+			};
+
+			req.open('GET', url, true);
+			req.send();
+		}
+
+		function preview(url)
+		{
+			if (previewGraph != null)
+			{
+				var req = new XMLHttpRequest();
+				req.withCredentials = true;
+				
+				req.onreadystatechange = function()
+				{
+					if (req.readyState == 4)
+					{
+						var codec = new mxCodec(req.responseXML);
+						codec.decode(codec.document.documentElement, previewGraph.getModel());
+						previewGraph.fit();
+					}
+				};
+				
+				req.onerror = function()
+				{
+					alert('error');
+				};
+	
+				req.open('GET', url, true);
+				req.send();
+			}
+		}
+	</script>
+</head>
+<body>
+	URL: <input id="url" type="text" size="50" value=""/>
+	<button onclick="edit(document.getElementById('url').value);">Edit</button>
+	<button onclick="preview(document.getElementById('url').value);">Preview</button>
+	<script type="text/javascript" src="https://www.draw.io/embed.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<html><head>
+	<script type="text/javascript">
+		var DRAW_IFRAME_URL = 'https://www.draw.io/?embed=1';
+		var xml = null;
+
+		function mxClientOnLoad(stylesheet)
+		{
+			xml = document.getElementById('mxfile').innerHTML;
+			xml = decodeURIComponent(xml);
+
+			// Removes all illegal control characters before parsing
+			var checked = [];
+
+			for (var i = 0; i < xml.length; i++)
+			{
+				var code = xml.charCodeAt(i);
+
+				// Removes all control chars except TAB, LF and CR
+				if (code >= 32 || code == 9 || code == 10 || code == 13)
+			    {
+			    	checked.push(xml.charAt(i));
+			    }
+			}
+
+			xml = checked.join('');
+
+			var div = document.createElement('div');
+			div.style.width = '480px';
+			div.style.height = '360px';
+			div.style.border = '1px solid gray';
+			div.style.position = 'relative';
+			document.body.appendChild(div);
+			var graph = new Graph(div);
+
+			graph.resetViewOnRootChange = false;
+			graph.foldingEnabled = false;
+			// NOTE: Tooltips require CSS
+			graph.setTooltips(false);
+			graph.setEnabled(false);
+
+			// Loads the stylesheet
+			if (stylesheet != null)
+			{
+				var xmlDoc = mxUtils.parseXml(stylesheet);
+				var dec = new mxCodec(xmlDoc);
+				dec.decode(xmlDoc.documentElement, graph.getStylesheet());
+			}
+
+			var xmlDoc = mxUtils.parseXml(xml);
+			var codec = new mxCodec(xmlDoc);
+			codec.decode(codec.document.documentElement, graph.getModel());
+			graph.fit();
+		}
+
+		function edit(url)
+		{
+			var border = 0;
+			var iframe = document.createElement('iframe');
+			iframe.style.zIndex = '9999';
+			iframe.style.position = 'absolute';
+			iframe.style.top = border + 'px';
+			iframe.style.left = border + 'px';
+
+			if (border == 0)
+			{
+				iframe.setAttribute('frameborder', '0');
+			}
+
+			var resize = function()
+			{
+				iframe.setAttribute('width', document.body.clientWidth - 2 * border);
+				iframe.setAttribute('height', document.body.clientHeight - 2 * border);
+			};
+
+			window.addEventListener('resize', resize);
+			resize();
+
+			var receive = function(evt)
+			{
+				if (evt.data == 'ready')
+				{
+					iframe.contentWindow.postMessage(xml, '*');
+					resize();
+				}
+				else
+				{
+					if (evt.data.length > 0)
+					{
+						var req2 = new XMLHttpRequest();
+						req2.withCredentials = true;
+
+						req2.onreadystatechange = function()
+						{
+							if (req2.readyState == 4)
+							{
+								window.location.reload();
+							}
+						};
+
+						var data = encodeURIComponent(evt.data);
+						var idx = doc.indexOf('<div ' + 'id="mxfile"');
+						var newdoc = doc.substring(0, idx) + '\n<div ' + 'id="mxfile" style="display:none;">' +
+							data + '</d' + 'iv>' +
+							'\n<script type="text/javascript">\nvar doc = document.documentElement.outerHTML;\n</' + 'script>' +
+							'\n<script type="text/javascript" src="https://www.draw.io/embed.js"></' + 'script></body></html>';
+
+						req2.open('PUT', location.pathname.substring(location.pathname.lastIndexOf("/") + 1), true);
+						req2.send(newdoc);
+					}
+
+					window.removeEventListener('resize', resize);
+					window.removeEventListener('message', receive);
+					document.body.removeChild(iframe);
+				}
+			};
+
+			window.addEventListener('message', receive);
+			iframe.setAttribute('src', DRAW_IFRAME_URL);
+			document.body.appendChild(iframe);
+		}
+	</script>
+</head>
+<body style="margin:0px;">
+	<button onclick="edit();">Edit</button>
+	
+
+<div id="mxfile" style="display:none;">%3CmxGraphModel%20dx%3D%22894%22%20dy%3D%221207%22%20grid%3D%221%22%20gridSize%3D%2210%22%20guides%3D%221%22%20tooltips%3D%221%22%20connect%3D%221%22%20fold%3D%221%22%20page%3D%221%22%20pageScale%3D%221%22%20pageWidth%3D%22826%22%20pageHeight%3D%221169%22%20style%3D%22default-style2%22%20math%3D%220%22%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%227%22%20value%3D%22%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-top%3A4px%3Btext-align%3Acenter%3B%26quot%3B%26gt%3B%26lt%3Bi%26gt%3B%26amp%3Blt%3B%26amp%3Blt%3BInterface%26amp%3Bgt%3B%26amp%3Bgt%3B%26lt%3B%2Fi%26gt%3B%26lt%3Bbr%2F%26gt%3B%26lt%3Bb%26gt%3BInterface%26lt%3B%2Fb%26gt%3B%26lt%3B%2Fp%26gt%3B%26lt%3Bhr%2F%26gt%3B%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-left%3A4px%3B%26quot%3B%26gt%3B%2B%20field1%3A%20Type%26lt%3Bbr%2F%26gt%3B%2B%20field2%3A%20Type%26lt%3B%2Fp%26gt%3B%26lt%3Bhr%2F%26gt%3B%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-left%3A4px%3B%26quot%3B%26gt%3B%2B%20method1(Type)%3A%20Type%26lt%3Bbr%2F%26gt%3B%2B%20method2(Type%2C%20Type)%3A%20Type%26lt%3B%2Fp%26gt%3B%22%20style%3D%22verticalAlign%3Dtop%3Balign%3Dleft%3Boverflow%3Dfill%3BfontSize%3D12%3BfontFamily%3DHelvetica%3Bhtml%3D1%3Bred%22%20parent%3D%221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22270%22%20y%3D%2280%22%20width%3D%22190%22%20height%3D%22140%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%228%22%20value%3D%22%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-top%3A4px%3Btext-align%3Acenter%3B%26quot%3B%26gt%3B%26lt%3Bi%26gt%3B%26amp%3Blt%3B%26amp%3Blt%3BInterface%26amp%3Bgt%3B%26amp%3Bgt%3B%26lt%3B%2Fi%26gt%3B%26lt%3Bbr%2F%26gt%3B%26lt%3Bb%26gt%3BInterface%26lt%3B%2Fb%26gt%3B%26lt%3B%2Fp%26gt%3B%26lt%3Bhr%2F%26gt%3B%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-left%3A4px%3B%26quot%3B%26gt%3B%2B%20field1%3A%20Type%26lt%3Bbr%2F%26gt%3B%2B%20field2%3A%20Type%26lt%3B%2Fp%26gt%3B%26lt%3Bhr%2F%26gt%3B%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-left%3A4px%3B%26quot%3B%26gt%3B%2B%20method1(Type)%3A%20Type%26lt%3Bbr%2F%26gt%3B%2B%20method2(Type%2C%20Type)%3A%20Type%26lt%3B%2Fp%26gt%3B%22%20style%3D%22verticalAlign%3Dtop%3Balign%3Dleft%3Boverflow%3Dfill%3BfontSize%3D12%3BfontFamily%3DHelvetica%3Bhtml%3D1%3Bblue%22%20parent%3D%221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%2260%22%20y%3D%22390%22%20width%3D%22190%22%20height%3D%22140%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%229%22%20value%3D%22Extends%22%20style%3D%22endArrow%3Dblock%3BendSize%3D16%3BendFill%3D0%3BedgeStyle%3DelbowEdgeStyle%3Belbow%3Dvertical%3Bblue%22%20parent%3D%221%22%20source%3D%227%22%20target%3D%228%22%20edge%3D%221%22%3E%3CmxGeometry%20as%3D%22geometry%22%3E%3CmxPoint%20as%3D%22sourcePoint%22%2F%3E%3CmxPoint%20x%3D%22160%22%20as%3D%22targetPoint%22%2F%3E%3C%2FmxGeometry%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2210%22%20value%3D%22%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-top%3A4px%3Btext-align%3Acenter%3B%26quot%3B%26gt%3B%26lt%3Bi%26gt%3B%26amp%3Blt%3B%26amp%3Blt%3BInterface%26amp%3Bgt%3B%26amp%3Bgt%3B%26lt%3B%2Fi%26gt%3B%26lt%3Bbr%2F%26gt%3B%26lt%3Bb%26gt%3BInterface%26lt%3B%2Fb%26gt%3B%26lt%3B%2Fp%26gt%3B%26lt%3Bhr%2F%26gt%3B%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-left%3A4px%3B%26quot%3B%26gt%3B%2B%20field1%3A%20Type%26lt%3Bbr%2F%26gt%3B%2B%20field2%3A%20Type%26lt%3B%2Fp%26gt%3B%26lt%3Bhr%2F%26gt%3B%26lt%3Bp%20style%3D%26quot%3Bmargin%3A0px%3Bmargin-left%3A4px%3B%26quot%3B%26gt%3B%2B%20method1(Type)%3A%20Type%26lt%3Bbr%2F%26gt%3B%2B%20method2(Type%2C%20Type)%3A%20Type%26lt%3B%2Fp%26gt%3B%22%20style%3D%22verticalAlign%3Dtop%3Balign%3Dleft%3Boverflow%3Dfill%3BfontSize%3D12%3BfontFamily%3DHelvetica%3Bhtml%3D1%3Bgreen%22%20parent%3D%221%22%20vertex%3D%221%22%3E%3CmxGeometry%20x%3D%22570%22%20y%3D%22370%22%20width%3D%22190%22%20height%3D%22140%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3CmxCell%20id%3D%2211%22%20value%3D%22%22%20style%3D%22endArrow%3Dnone%3BedgeStyle%3DelbowEdgeStyle%3Belbow%3Dvertical%22%20parent%3D%221%22%20source%3D%227%22%20target%3D%2210%22%20edge%3D%221%22%3E%3CmxGeometry%20relative%3D%221%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E</div>
+<script type="text/javascript">
+var doc = document.documentElement.outerHTML;
+</script>
+<script type="text/javascript" src="https://www.draw.io/embed.js"></script></body></html>

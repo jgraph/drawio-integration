@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="162px" height="102px" version="1.1" content="&lt;mxGraphModel dx=&quot;891&quot; dy=&quot;1282&quot; grid=&quot;1&quot; gridSize=&quot;10&quot; guides=&quot;1&quot; tooltips=&quot;1&quot; connect=&quot;1&quot; fold=&quot;1&quot; page=&quot;1&quot; pageScale=&quot;1&quot; pageWidth=&quot;826&quot; pageHeight=&quot;1169&quot; background=&quot;#ffffff&quot; style=&quot;default-style2&quot; math=&quot;0&quot;&gt;&lt;root&gt;&lt;mxCell id=&quot;0&quot;/&gt;&lt;mxCell id=&quot;1&quot; style=&quot;&quot; parent=&quot;0&quot;/&gt;&lt;mxCell id=&quot;145&quot; value=&quot;&quot; style=&quot;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=none;&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;330&quot; y=&quot;270&quot; width=&quot;160&quot; height=&quot;100&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;51&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=1;shape=link;endArrow=none;endFill=0;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;52&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;820&quot; y=&quot;500&quot; as=&quot;targetPoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;800&quot; y=&quot;364&quot;/&gt;&lt;mxPoint x=&quot;800&quot; y=&quot;644&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;53&quot; style=&quot;html=1;curved=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;520&quot; y=&quot;317&quot;/&gt;&lt;mxPoint x=&quot;510&quot; y=&quot;250&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;62&quot; value=&quot;&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;550&quot; y=&quot;920&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;65&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;763&quot; y=&quot;364&quot;/&gt;&lt;mxPoint x=&quot;763&quot; y=&quot;635&quot;/&gt;&lt;/Array&gt;&lt;mxPoint x=&quot;716.9952615528866&quot; y=&quot;635&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;66&quot; value=&quot;Exit&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeWidth=2;labelBorderColor=#000000;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;-0.823&quot; relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint as=&quot;offset&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;71&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;414&quot; y=&quot;331&quot; as=&quot;sourcePoint&quot;/&gt;&lt;Array as=&quot;points&quot;&gt;&lt;mxPoint x=&quot;408&quot; y=&quot;283&quot;/&gt;&lt;mxPoint x=&quot;439&quot; y=&quot;283&quot;/&gt;&lt;/Array&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;80&quot; value=&quot;dispatch&quot; style=&quot;html=1;verticalAlign=bottom;endArrow=block;entryX=0;entryY=0;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;129&quot; y=&quot;701&quot; as=&quot;sourcePoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;81&quot; value=&quot;return&quot; style=&quot;html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;exitX=0;exitY=0.95;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;&gt;&lt;mxPoint x=&quot;129&quot; y=&quot;777&quot; as=&quot;targetPoint&quot;/&gt;&lt;/mxGeometry&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;107&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeWidth=5;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;108&quot; style=&quot;edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;&quot; parent=&quot;1&quot; edge=&quot;1&quot;&gt;&lt;mxGeometry relative=&quot;1&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;mxCell id=&quot;144&quot; value=&quot;Click here!&quot; style=&quot;rounded=1;whiteSpace=wrap;html=1;fontSize=15;fontStyle=1;arcSize=39;blue&quot; parent=&quot;1&quot; vertex=&quot;1&quot;&gt;&lt;mxGeometry x=&quot;350&quot; y=&quot;290&quot; width=&quot;120&quot; height=&quot;60&quot; as=&quot;geometry&quot;/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;">
+	<script type="text/javascript"><![CDATA[
+		function edit(image)
+		{
+			var wnd = null;
+			
+			var save = function()
+			{
+				var req = new XMLHttpRequest();
+				req.withCredentials = true;
+		
+				req.onreadystatechange = function()
+				{
+					if (req.readyState == 4)
+					{
+						if (req.status >= 200 || req.status <= 299)
+						{
+							wnd.close();
+						}
+						else
+						{
+							alert('Error ' + req.status);
+						}
+					}
+				};
+			
+				req.open('PUT', location.href, true);
+				req.send('<?xml version="1.0" encoding="UTF-8"?>\n' +
+						'<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n' +
+						document.documentElement.outerHTML);
+			};
+			
+			var receive = function(evt)
+			{
+				if (evt.data.length > 0)
+				{
+					var msg = JSON.parse(evt.data);
+					
+					if (msg.event == 'init')
+					{
+						wnd.postMessage(JSON.stringify({action: 'load', xml: image.ownerSVGElement.outerHTML}), '*');
+					}
+					else if (msg.event == 'export')
+					{
+						var temp = new Image();
+						
+						temp.onload = function()
+						{
+							image.setAttribute('xlink:href', msg.data);
+							
+							image.setAttribute('width', temp.width + 'px');
+							image.setAttribute('height', temp.height + 'px');
+							image.ownerSVGElement.setAttribute('width', temp.width + 'px');
+							image.ownerSVGElement.setAttribute('height', temp.height + 'px');
+							
+							save();
+						};
+						
+						temp.onerror = function(err)
+						{
+							alert('Error ' + err);
+						}
+						
+						temp.src = msg.data;
+					}
+					else if (msg.event == 'save')
+					{
+						wnd.postMessage(JSON.stringify({action: 'export', format: 'png', spinKey: 'saving'}), '*');
+						image.ownerSVGElement.setAttribute('content', msg.xml);
+					}
+					else if (msg.event == 'exit')
+					{
+						wnd.close();
+					}
+				}
+			};
+		
+			window.addEventListener('message', receive);
+			wnd = window.open('https://www.draw.io/?embed=1&ui=atlas&spin=1&proto=json');
+		}
+	  ]]></script>
+	<image style="cursor:pointer;" onclick="edit(this);" x="0" y="0" width="162px" height="102px" xlink:href="data:image/png;base64,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"/>
+</svg>
