@@ -5,7 +5,7 @@
  * Usage: DiagramEditor.editElement(elt) where elt is an img or object with
  * a data URI src or data attribute or an svg node with a content attribute.
  *
- * See https://jgraph.github.io/drawio-html5/javascript.html
+ * See https://jgraph.github.io/drawio-integration/javascript.html
  */
 function DiagramEditor(config, ui, done)
 {
@@ -30,7 +30,7 @@ function DiagramEditor(config, ui, done)
 			}
 			catch (e)
 			{
-				// ignore
+				console.error(e);
 			}
 		}
 	};
