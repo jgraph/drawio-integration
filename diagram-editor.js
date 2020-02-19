@@ -143,7 +143,7 @@ DiagramEditor.prototype.startEditing = function(data, format, title)
 		this.frame = this.createFrame(
 			this.getFrameUrl(),
 			this.getFrameStyle());
-		document.body.append(this.frame);
+		document.body.appendChild(this.frame);
 		this.setWaiting(true);
 	}
 };
