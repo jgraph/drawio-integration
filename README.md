@@ -34,7 +34,7 @@ Fonts, colors, default styles, libraries, CSS and more can be configured to matc
 
 The following examples are available:
 
-* <a href="https://github.com/jgraph/drawio-integration/blob/master/diagram-editor.js" target="_blank">JavaScript API</a> for editing embedded SVG and PNG images in a HTML page (see <a href="http://jgraph.github.io/drawio-integration/javascript.html" target="_blank">example</a>)
+* <a href="https://github.com/jgraph/drawio-integration/blob/master/diagram-editor.js" target="_blank">JavaScript API</a> for editing embedded SVG and PNG images in a HTML page (see <a href="http://jgraph.github.io/drawio-integration/helloworld.html" target="_blank">example1</a>, <a href="http://jgraph.github.io/drawio-integration/javascript.html" target="_blank">example2</a>)
 * <a href="http://jgraph.github.io/drawio-integration/localstorage.html#default" target="_blank">Using Local Storage</a> Saving and loading a draw.io diagram to/from HTML5 local storage (use the part of the hash-tag to change the local storage key)
 * <a href="http://jgraph.github.io/drawio-integration/localstorage-svg.html#default" target="_blank">Using Local Storage (SVG)</a> Saving and loading a draw.io diagram to/from HTML5 local storage as SVG (use the part of the hash-tag to change the local storage key). This example uses an SVG element instead of an image to support hyperlinks. Keep in mind that draw.io uses foreignObjects for text labels in static SVG output. ForeignObjects are not supported in IE11 and earlier. (For draft states, a special dialog is now available.)
 * <a href="http://jgraph.github.io/drawio-integration/localfile.html" target="_blank">Using Local File</a> Saving and loading to/from a self-modifying local file
