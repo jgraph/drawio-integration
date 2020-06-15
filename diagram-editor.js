@@ -52,7 +52,7 @@ DiagramEditor.prototype.config = null;
 /**
  * Protocol and domain to use.
  */
-DiagramEditor.prototype.drawDomain = 'https://www.draw.io/';
+DiagramEditor.prototype.drawDomain = 'https://embed.diagrams.net/';
 
 /**
  * UI theme to be use.
@@ -158,12 +158,12 @@ DiagramEditor.prototype.setWaiting = function(waiting)
 		// Redirect cursor to parent for SVG and object
 		var elt = this.startElement;
 		var name = elt.nodeName.toLowerCase();
-		
+
 		if (name == 'svg' || name == 'object')
 		{
 			elt = elt.parentNode;
 		}
-		
+
 		if (elt != null)
 		{
 			if (waiting)
