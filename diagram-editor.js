@@ -7,11 +7,13 @@
  *
  * See https://jgraph.github.io/drawio-integration/javascript.html
  */
-function DiagramEditor(config, ui, done)
+function DiagramEditor(config, ui, done, initialized)
 {
 	this.config = (config != null) ? config : this.config;
-	this.done = (done != null) ? done : this.done;
 	this.ui = (ui != null) ? ui : this.ui;
+	this.done = (done != null) ? done : this.done;
+  this.initialized = (initialized != null) ? initialized : this.initialized;
+
 	var self = this;
 
 	this.handleMessageEvent = function(evt)
@@ -41,7 +43,15 @@ function DiagramEditor(config, ui, done)
  */
 DiagramEditor.editElement = function(elt, config, ui, done)
 {
-	return new DiagramEditor(config, ui, done).editElement(elt);
+  if (!elt.diagramEditorStarting)
+  {
+    elt.diagramEditorStarting = true;
+
+    return new DiagramEditor(config, ui, done, function()
+    {
+        delete elt.diagramEditorStarting;
+    }).editElement(elt);
+   }
 };
 
 /**
@@ -58,6 +68,11 @@ DiagramEditor.prototype.drawDomain = 'https://embed.diagrams.net/';
  * UI theme to be use.
  */
 DiagramEditor.prototype.ui = 'min';
+
+/**
+ * Contains XML for pending image export.
+ */
+DiagramEditor.prototype.xml = null;
 
 /**
  * Format to use.
@@ -253,7 +268,7 @@ DiagramEditor.prototype.getFrameStyle = function()
  */
 DiagramEditor.prototype.getFrameUrl = function()
 {
-	var url = this.drawDomain + '?embed=1&proto=json&spin=1';
+	var url = this.drawDomain + '?proto=json&spin=1';
 
 	if (this.ui != null)
 	{
@@ -313,32 +328,47 @@ DiagramEditor.prototype.handleMessage = function(msg)
 	}
 	else if (msg.event == 'export')
 	{
-		this.save(msg.data, false, this.startElement);
+    this.setElementData(this.startElement, msg.data);
 		this.stopEditing();
+    this.xml = null;
 	}
 	else if (msg.event == 'save')
 	{
+    this.save(msg.xml, false, this.startElement);
+    this.xml = msg.xml;
+
 		if (msg.exit)
 		{
 			msg.event = 'exit';
 		}
-		else
-		{
-			this.setStatus('allChangesSaved', false);
-		}
+    else
+    {
+      this.setStatus('allChangesSaved', false);
+    }
 	}
 
 	if (msg.event == 'exit')
 	{
-		if (this.format != 'xml' && !msg.modified)
+		if (this.format != 'xml')
 		{
-			this.postMessage({action: 'export', format: this.format,
-				xml: msg.xml, spinKey: 'export'});
+      if (this.xml != null)
+      {
+			  this.postMessage({action: 'export', format: this.format,
+          xml: this.xml, spinKey: 'export'});
+      }
+      else
+      {
+      	this.stopEditing(msg);
+      }
 		}
 		else
 		{
-			this.save(msg.xml, false, this.startElement);
-			this.stopEditing(msg);
+      if (msg.modified == null || msg.modified)
+      {
+			  this.save(msg.xml, false, this.startElement);
+      }
+
+      this.stopEditing(msg);
 		}
 	}
 };
@@ -361,6 +391,7 @@ DiagramEditor.prototype.initializeEditor = function()
 		title: this.getTitle()});
 	this.setWaiting(false);
 	this.setActive(true);
+  this.initialized();
 };
 
 /**
@@ -368,17 +399,21 @@ DiagramEditor.prototype.initializeEditor = function()
  */
 DiagramEditor.prototype.save = function(data, draft, elt)
 {
-	if (elt != null && !draft)
-	{
-		this.setElementData(elt, data);
-		this.done(data, draft, elt);
-	}
+	this.done(data, draft, elt);
 };
 
 /**
  * Invoked after save.
  */
 DiagramEditor.prototype.done = function()
+{
+	// hook for subclassers
+};
+
+/**
+ * Invoked after the editor has sent the init message.
+ */
+DiagramEditor.prototype.initialized = function()
 {
 	// hook for subclassers
 };
