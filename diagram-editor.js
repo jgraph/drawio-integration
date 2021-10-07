@@ -7,12 +7,13 @@
  *
  * See https://jgraph.github.io/drawio-integration/javascript.html
  */
-function DiagramEditor(config, ui, done, initialized)
+function DiagramEditor(config, ui, done, initialized, urlParams)
 {
 	this.config = (config != null) ? config : this.config;
 	this.ui = (ui != null) ? ui : this.ui;
 	this.done = (done != null) ? done : this.done;
-  this.initialized = (initialized != null) ? initialized : this.initialized;
+	this.initialized = (initialized != null) ? initialized : this.initialized;
+	this.urlParams = urlParams;
 
 	var self = this;
 
@@ -41,7 +42,7 @@ function DiagramEditor(config, ui, done, initialized)
 /**
  * Static method to edit the diagram in the given img or object.
  */
-DiagramEditor.editElement = function(elt, config, ui, done)
+DiagramEditor.editElement = function(elt, config, ui, done, urlParams)
 {
   if (!elt.diagramEditorStarting)
   {
@@ -50,7 +51,7 @@ DiagramEditor.editElement = function(elt, config, ui, done)
     return new DiagramEditor(config, ui, done, function()
     {
         delete elt.diagramEditorStarting;
-    }).editElement(elt);
+    }, urlParams).editElement(elt);
    }
 };
 
@@ -283,6 +284,11 @@ DiagramEditor.prototype.getFrameUrl = function()
 	if (this.config != null)
 	{
 		url += '&configure=1';
+	}
+
+	if (this.urlParams != null)
+	{
+		url += '&' + this.urlParams.join('&');
 	}
 
 	return url;
