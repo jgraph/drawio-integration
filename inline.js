@@ -39,9 +39,9 @@
 	{
 		if (img.src.substring(0, 26) == 'data:image/svg+xml;base64,')
 		{
-			img.src = createSvgDataUri(invertSvg(
-				new DOMParser().parseFromString(atob(
-					img.src.substring(img.src.indexOf(',') + 1)),
+			img.src = createSvgDataUri(invertSvg(new DOMParser().
+				parseFromString(decodeURIComponent(escape(atob(
+					img.src.substring(img.src.indexOf(',') + 1)))),
 						'text/xml')));
 			onChange(img);
 		}
