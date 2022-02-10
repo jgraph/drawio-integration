@@ -41,3 +41,4 @@ The following examples are available:
 * <a href="http://jgraph.github.io/drawio-integration/localfile.html" target="_blank">Using Local File</a> Saving and loading to/from a self-modifying local file
 * <a href="https://github.com/jgraph/drawio-integration/tree/master/webdav" target="_blank">Using embed mode with WebDav</a>
 * <a href="https://github.com/jgraph/drawio-github" target="_blank">Using embed mode with GitHub</a>
+* <a href="https://github.com/jgraph/drawio-github/blob/master/DARK-MODE.md" target="_blank">Supporting Dark Mode in SVG</a>
