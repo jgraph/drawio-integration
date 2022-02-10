@@ -10,7 +10,6 @@
 	iframe.style.height = '100%';
 
 	var dark = false;
-	var delay = 0;
 
 	function invertSvg(doc)
 	{
@@ -18,10 +17,25 @@
 
 		var style = doc.createElementNS('http://www.w3.org/2000/svg', 'style');
 		style.appendChild(doc.createTextNode(
-			'[stroke="#000000"] {stroke: #ffffff; }' +
-			'[fill="#ffffff"] {fill: none; }' +
-			'div[style*="; color: rgb(0, 0, 0); "] ' +
-			'{color: white !important; }'));
+			':root {--light-color: #c9d1d9; --dark-color: #0d1117; }' +
+			'svg:target[style^="background-color:"] { background-color: var(--dark-color) !important; }' +
+			'g[filter="url(#dropShadow)"] { filter: none !important; }' +
+			'[stroke="rgb(0, 0, 0)"] { stroke: var(--light-color); }' +
+			'[stroke="rgb(255, 255, 255)"] { stroke: var(--dark-color); }' +
+			'[fill="rgb(0, 0, 0)"] { fill: var(--light-color); }' +
+			'[fill="rgb(255, 255, 255)"] { fill: var(--dark-color); }' +
+			'g[fill="rgb(0, 0, 0)"] text { fill: var(--light-color); }' +
+			'div[data-drawio-colors*="color: rgb(0, 0, 0)"]' +
+			'	div { color: var(--light-color) !important; }' +
+			'div[data-drawio-colors*="border-color: rgb(0, 0, 0)"]' +
+			'	{ border-color: var(--light-color) !important; }' +
+			'div[data-drawio-colors*="border-color: rgb(0, 0, 0)"]' +
+			'	div { border-color: var(--light-color) !important; }' +
+			'div[data-drawio-colors*="background-color: rgb(255, 255, 255)"]' +
+			'	{ background-color: var(--dark-color) !important; }' +
+			'div[data-drawio-colors*="background-color: rgb(255, 255, 255)"]' +
+			'	div { background-color: var(--dark-color) !important; }'
+		));
 		defs[0].appendChild(style);
 
 		return doc;
