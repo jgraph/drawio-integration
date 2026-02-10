@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        background-color: light-dark(#ffffff, #191919);
+        color:light-dark(#121212, #ffffff);
+        font-size: 14px;
+        width:160px;
+      }
+    </style>
+  </head>
+  <body style="color-scheme:light dark;text-align:center;font-size:12px;">
+    <button style="width:120px;margin:5px;" id="insertDiagram">Insert a diagram</button>
+    <div style="padding:3px 0;">
+      Or drag <a href="" id="link" download="Diagram.drawio.svg">this</a> into your app.
+    </div>
+    <hr size="1">
+    <details>
+      <summary>Update diagrams</summary>
+      <button style="width:120px;margin:10px 5px 5px 5px;" id="updateDiagrams">Update diagrams</button>
+      <div style="padding:3px 0;text-align:center;">
+        Updates dark mode in previous diagram files.
+      </div>
+    </details>
+  	<script src="popup.js"></script>
+  </body>
+</html>
